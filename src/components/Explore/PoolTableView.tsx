@@ -64,6 +64,19 @@ const PoolTableView: React.FC<PoolTableViewProps> = ({ pools, onUsePool, isConne
 
   const formatFee = (value: number) => `${value.toFixed(2)}%`;
 
+  const handleRowKeyDown = (e: React.KeyboardEvent, poolId: string) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onUsePool(poolId);
+    }
+  };
+
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
       <div className="overflow-x-auto">
@@ -84,11 +97,15 @@ const PoolTableView: React.FC<PoolTableViewProps> = ({ pools, onUsePool, isConne
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-            {pools.map((pool) => (
+            {pools.map((pool, index) => (
               <tr
                 key={pool.id}
+                role="row"
+                tabIndex={0}
+                aria-rowindex={index + 1}
                 onClick={() => onUsePool(pool.id)}
-                className="group cursor-pointer transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-white/5"
+                onKeyDown={(e) => handleRowKeyDown(e, pool.id)}
+                className="group cursor-pointer transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-white/5 focus-visible:bg-gray-200 focus-visible:outline-none"
               >
                 <td className="px-4 py-4 sm:px-6">
                   <div>
